@@ -15,8 +15,8 @@ import java.nio.file.Paths;
  * An application with two maps side-by-side zoomed in on different locations.
  * Author: UC San Diego Coursera Intermediate Programming team
  *
- * @author Andrey Veshtard
- *         Date: July 22, 2017
+ * @author Andrei Veshtard
+ *         Date: June 22, 2017
  */
 public class HelloWorld extends PApplet {
     /**

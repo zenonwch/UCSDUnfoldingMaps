@@ -44,12 +44,12 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 		
 	
 	// constructor
-	public EarthquakeMarker (PointFeature feature) 
+	public EarthquakeMarker (final PointFeature feature)
 	{
 		super(feature.getLocation());
 		// Add a radius property and then set the properties
-		java.util.HashMap<String, Object> properties = feature.getProperties();
-		float magnitude = Float.parseFloat(properties.get("magnitude").toString());
+		final java.util.HashMap<String, Object> properties = feature.getProperties();
+		final float magnitude = Float.parseFloat(properties.get("magnitude").toString());
 		properties.put("radius", 2*magnitude );
 		setProperties(properties);
 		this.radius = 1.75f*getMagnitude();
@@ -57,7 +57,7 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	
 
 	// calls abstract method drawEarthquake and then checks age and draws X if needed
-	public void draw(PGraphics pg, float x, float y) {
+	public void draw(final PGraphics pg, final float x, final float y) {
 		// save previous styling
 		pg.pushStyle();
 			
@@ -67,7 +67,12 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 		// call abstract method implemented in child class to draw marker shape
 		drawEarthquake(pg, x, y);
 		
-		// OPTIONAL TODO: draw X over marker if within past day		
+		// OPTIONAL TODO: draw X over marker if within past day
+		if ("Past Hour".equals(getAge())) {
+			final float r = getRadius();
+			pg.line(x - r/2, y - r/2, x + r/2, y + r/2);
+			pg.line(x + r/2, y - r/2, x - r/2, y + r/2);
+		}
 		
 		// reset to previous styling
 		pg.popStyle();
@@ -78,8 +83,16 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	// We suggest: Deep = red, intermediate = blue, shallow = yellow
 	// But this is up to you, of course.
 	// You might find the getters below helpful.
-	private void colorDetermine(PGraphics pg) {
+	private void colorDetermine(final PGraphics pg) {
 		//TODO: Implement this method
+		if (getDepth() < 70) {
+			pg.fill(255, 255, 0);
+		} else if (getDepth() < 300) {
+			pg.fill(0, 0, 255);
+		} else {
+			pg.fill(255, 0, 0);
+		}
+
 	}
 	
 	
@@ -109,5 +122,7 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 		return isOnLand;
 	}
 	
-	
+	public String getAge() {
+		return (String) getProperty("age");
+	}
 }
